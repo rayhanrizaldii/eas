@@ -14,7 +14,7 @@ String decodeFileName(String encodedFileName) {
 }
 
 class FetchUser {
-  static const String baseUrl = 'http://192.168.110.215:8080/eas/pengguna';
+  static const String baseUrl = 'http://192.168.18.213:8080/eas/pengguna';
   static Future<Map<dynamic, dynamic>> GetUserById(int id) async {
     try {
       final response = await http.get(
@@ -166,6 +166,18 @@ class FetchUser {
     } catch (error) {
       // Tangani kesalahan jika ada
       print('Error: $error');
+    }
+  }
+
+  static Future<List<Map<String, dynamic>>> searchUsers(String query) async {
+    final response =
+        await http.get(Uri.parse('${baseUrl}/search_user.php?q=$query'));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      return data.cast<Map<String, dynamic>>().toList();
+    } else {
+      throw Exception('Failed to load data');
     }
   }
 }
