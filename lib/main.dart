@@ -1,7 +1,10 @@
 import 'package:eas/pages/HomePage.dart';
+import 'package:eas/pages/book/Add_Book.dart';
+import 'package:eas/pages/book/Book_Page.dart';
 import 'package:eas/pages/user/Add_User.dart';
 import 'package:eas/pages/user/User_Page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_remix/flutter_remix.dart';
 
 void main() {
   runApp(MyApp());
@@ -32,7 +35,9 @@ class _MyDrawerState extends State<MyDrawer> {
   static final List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     AddUser(),
+    AddBook(),
     UserPage(),
+    BookPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -45,17 +50,15 @@ class _MyDrawerState extends State<MyDrawer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        foregroundColor: Colors.black,
         centerTitle: true,
         title: Text('1462100047'),
         elevation: 0,
+        backgroundColor: Color(0xff7FC7D9),
       ),
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Colors.blue, Color.fromARGB(255, 116, 133, 192)],
-          ),
+          color: Color(0xff7FC7D9),
         ),
         child: _widgetOptions[_selectedIndex],
       ),
@@ -64,75 +67,74 @@ class _MyDrawerState extends State<MyDrawer> {
           padding: EdgeInsets.zero,
           children: [
             DrawerHeader(
-              child: Text(
-                'Menu',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+              child: Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      'Admin',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color: Color(0xff7FC7D9),
                 borderRadius: BorderRadiusDirectional.only(
-                  bottomEnd: Radius.circular(20),
-                  bottomStart: Radius.circular(20),
+                  bottomStart: Radius.circular(50),
                 ),
               ),
             ),
             ListTile(
-              leading: Icon(Icons.home),
+              leading: Icon(FlutterRemix.home_2_fill),
               title: const Text('Home'),
               selected: _selectedIndex == 0,
               onTap: () {
-                // Update the state of the app
                 _onItemTapped(0);
-                // Then close the drawer
                 Navigator.pop(context);
               },
             ),
             ListTile(
-              leading: Icon(Icons.person_add),
+              leading: Icon(FlutterRemix.user_add_fill),
               title: const Text('Tambah Pengguna'),
               selected: _selectedIndex == 1,
               onTap: () {
-                // Update the state of the app
                 _onItemTapped(1);
-                // Then close the drawer
                 Navigator.pop(context);
               },
             ),
             ListTile(
-              leading: Icon(Icons.bookmark_add),
+              leading: Icon(FlutterRemix.contacts_book_upload_fill),
               title: const Text('Tambah Buku'),
               selected: _selectedIndex == 2,
               onTap: () {
-                // Update the state of the app
                 _onItemTapped(2);
-                // Then close the drawer
                 Navigator.pop(context);
               },
             ),
-            Divider(),
+            Divider(
+              color: Colors.black26,
+            ),
             ListTile(
-              leading: Icon(Icons.person_pin_circle_rounded),
+              leading: Icon(FlutterRemix.user_search_fill),
               title: const Text('Laporan Pengguna'),
-              selected: _selectedIndex == 2,
+              selected: _selectedIndex == 3,
               onTap: () {
-                // Update the state of the app
-                _onItemTapped(2);
-                // Then close the drawer
+                _onItemTapped(3);
                 Navigator.pop(context);
               },
             ),
             ListTile(
-              leading: Icon(Icons.book_rounded),
+              leading: Icon(FlutterRemix.book_read_fill),
               title: const Text('Laporan Buku'),
-              selected: _selectedIndex == 1,
+              selected: _selectedIndex == 4,
               onTap: () {
-                // Update the state of the app
-                _onItemTapped(1);
-                // Then close the drawer
+                _onItemTapped(4);
                 Navigator.pop(context);
               },
             ),
