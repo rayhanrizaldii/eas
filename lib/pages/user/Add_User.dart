@@ -95,50 +95,19 @@ class _AddUserState extends State<AddUser> {
                     height: 10,
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    child: TextFormField(
-                      cursorColor: Colors.black,
-                      controller: _idpenggunaController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter some text';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'ID Pengguna',
-                        border: OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black)),
-                        labelStyle: TextStyle(
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                  ),
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      child: TextFieldCustom(
+                        controller: _idpenggunaController,
+                        labelText: 'Id Pengguna',
+                      )),
                   const SizedBox(
                     height: 10,
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    child: TextFormField(
-                      cursorColor: Colors.black,
+                    child: TextFieldCustom(
                       controller: _namaController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter some text';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Nama',
-                        border: OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black)),
-                        labelStyle: TextStyle(
-                          color: Colors.black,
-                        ),
-                      ),
+                      labelText: 'Nama',
                     ),
                   ),
                   const SizedBox(
@@ -146,24 +115,9 @@ class _AddUserState extends State<AddUser> {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    child: TextFormField(
-                      cursorColor: Colors.black,
+                    child: TextFieldCustom(
                       controller: _alamatController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter some text';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Alamat',
-                        border: OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black)),
-                        labelStyle: TextStyle(
-                          color: Colors.black,
-                        ),
-                      ),
+                      labelText: 'Alamat',
                     ),
                   ),
                   const SizedBox(
@@ -206,25 +160,9 @@ class _AddUserState extends State<AddUser> {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    child: TextFormField(
-                      cursorColor: Colors.black,
+                    child: TextFieldCustom(
                       controller: _notelpController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter some text';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'No Telepon',
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black)),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black)),
-                        labelStyle: TextStyle(
-                          color: Colors.black,
-                        ),
-                      ),
+                      labelText: 'Nomor Telepon',
                     ),
                   ),
                   SizedBox(height: 10.0),
@@ -357,6 +295,41 @@ class _AddUserState extends State<AddUser> {
               )
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class TextFieldCustom extends StatelessWidget {
+  const TextFieldCustom({
+    Key? key,
+    required this.controller,
+    required this.labelText,
+  }) : super(key: key);
+
+  final TextEditingController controller;
+  final String labelText;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      cursorColor: Colors.black,
+      controller: controller,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Silahkan Isi Bagian Yang Kosong';
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        labelText: labelText,
+        border: OutlineInputBorder(),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.black),
+        ),
+        labelStyle: TextStyle(
+          color: Colors.black,
         ),
       ),
     );
