@@ -9,6 +9,8 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
+  final TextEditingController _searchController = TextEditingController();
+  List<Map<String, dynamic>> _searchResults = [];
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -17,27 +19,53 @@ class _UserPageState extends State<UserPage> {
         height: 600,
         child: Column(
           children: [
+            Padding(
+              padding: EdgeInsets.all(16.0),
+              child: TextFieldCustom(
+                controller: _searchController,
+                onChanged: (query) async {
+                  List<Map<String, dynamic>> results =
+                      await FetchUser.searchUsers(query);
+                  setState(() {
+                    _searchResults = results;
+                  });
+                },
+                labelText: 'Cari Pengguna....',
+              ),
+            ),
             Expanded(
-              child: FutureBuilder<List<Map<String, dynamic>>>(
-                future: FetchUser.getUser(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    final data = snapshot.data!;
-                    return ListView.builder(
-                      itemCount: data.length,
+              child: _searchResults.isNotEmpty
+                  ? ListView.builder(
+                      itemCount: _searchResults.length,
                       itemBuilder: (context, index) {
-                        final item = data[index];
+                        final item = _searchResults[index];
                         return buildListItem(item);
                       },
-                    );
-                  } else if (snapshot.hasError) {
-                    print('${snapshot.error}');
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                },
-              ),
+                    )
+                  : (_searchController.text.isNotEmpty
+                      ? Center(
+                          child:
+                              Text('Tidak ada data pengguna yang ditemukan.'))
+                      : FutureBuilder<List<Map<String, dynamic>>>(
+                          future: FetchUser.getUser(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              final data = snapshot.data!;
+                              return ListView.builder(
+                                itemCount: data.length,
+                                itemBuilder: (context, index) {
+                                  final item = data[index];
+                                  return buildListItem(item);
+                                },
+                              );
+                            } else if (snapshot.hasError) {
+                              print('${snapshot.error}');
+                              return Text('Error: ${snapshot.error}');
+                            } else {
+                              return Center(child: CircularProgressIndicator());
+                            }
+                          },
+                        )),
             ),
           ],
         ),
@@ -49,18 +77,18 @@ class _UserPageState extends State<UserPage> {
     int itemId = int.parse(item['id']);
 
     return Card(
-      margin: EdgeInsets.only(top: 20, left: 20, right: 20),
+      margin: EdgeInsets.only(top: 10, left: 20, right: 20),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
+        borderRadius: BorderRadius.circular(10.0),
       ),
       clipBehavior: Clip.hardEdge,
       child: Dismissible(
         key: Key(itemId.toString()),
         background: Container(
-          color: Color(0xfff001B79),
+          color: Colors.redAccent,
           alignment: Alignment.centerRight,
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(15.0),
             child: Icon(
               Icons.delete,
               color: Colors.white,
@@ -81,7 +109,7 @@ class _UserPageState extends State<UserPage> {
                   child: CircleAvatar(
                     radius: 35,
                     backgroundImage: NetworkImage(
-                      'http://192.168.110.215:8080/eas/pengguna/images/' +
+                      'http://192.168.18.213:8080/eas/pengguna/images/' +
                           item['foto'],
                     ),
                   ),
@@ -179,5 +207,41 @@ class _UserPageState extends State<UserPage> {
     await FetchUser.deleteUser(itemId);
 
     setState(() {});
+  }
+}
+
+class TextFieldCustom extends StatelessWidget {
+  const TextFieldCustom({
+    Key? key,
+    required this.controller,
+    required this.labelText,
+    required this.onChanged,
+  }) : super(key: key);
+
+  final TextEditingController controller;
+  final String labelText;
+  final onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      cursorColor: Color(0xff1d1d1d),
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: labelText,
+        prefixIcon: Icon(Icons.search, color: Color(0xff1d1d1d)),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xff1d1d1d)),
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        labelStyle: TextStyle(
+          color: Color(0xff1d1d1d),
+        ),
+      ),
+      onChanged: onChanged,
+    );
   }
 }
